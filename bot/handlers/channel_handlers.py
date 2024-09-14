@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
 from ..keyboards.ru import *
-from ..fsm import NewChannel
+from ..fsm import NewChannel, Donors
 from ..text.ru import ManagingChannelText, FunctionsText
 
 
@@ -31,7 +31,22 @@ async def donors(callback: CallbackQuery):
     await callback.message.edit_text(text=ManagingChannelText.what_are_donors, reply_markup=await add_feature('donors'), parse_mode='html')
 
 @channel_router.callback_query(F.data == 'add_donors')
-async def add_donors(callback: CallbackQuery):
-    await callback.message.answer(text='вв')
+async def add_donors(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer(text=ManagingChannelText.send_channels_donors, reply_markup=send_chats)
+    await state.set_state(Donors.channels)
 
+@channel_router.message(Donors.channels)
+async def add_donors_2(message: Message, state: FSMContext):
+    data = await state.get_data()
+    new_channel = message.chat_shared
+    if data:
+        data['channels'].append(new_channel)
+        await state.update_data(channels=data['channels'])
+    else: 
+        await state.update_data(channels=[new_channel])
+    print(await state.get_data())
     
+@channel_router.message(F.text == 'Готово!')
+async def add_donors_3(message: Message, state: FSMContext):
+    data = await state.get_data()
+    print(data)

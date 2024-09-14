@@ -1,8 +1,9 @@
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 
+import os
 from typing import Dict, Any, Callable, Awaitable
-
+from dotenv import load_dotenv
 
 
 class AuthMiddleware(BaseMiddleware):
@@ -12,5 +13,6 @@ class AuthMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: Dict[str, Any]) -> Any:
         
+        load_dotenv()
         if event.from_user.id != 0:
             return await handler(event, data)

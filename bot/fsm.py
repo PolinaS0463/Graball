@@ -19,3 +19,6 @@ class NewChannel(StatesGroup):
 class NewChatMember(StatesGroup):
     uid    = State()
     commit = State()
+
+class Donors(StatesGroup):
+    channels = State()

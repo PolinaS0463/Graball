@@ -54,6 +54,13 @@ send_chat = ReplyKeyboardMarkup(keyboard=[
     ))]], 
     resize_keyboard=True, one_time_keyboard=True)
 
+send_chats = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Отправить', request_chat=KeyboardButtonRequestChat(
+        request_id=1, chat_is_channel=True, request_title=True, request_username=True
+    ))],
+    [KeyboardButton(text='Готово!')]], 
+    resize_keyboard=True, one_time_keyboard=True)
+
 contribution = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Python Developer', callback_data='python_developer')],
     [InlineKeyboardButton(text='Переводчик', callback_data='translator')]

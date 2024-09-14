@@ -150,6 +150,7 @@ class ManagingChannelText:
     deleted_successfully = 'Канал успешно удален!'
     updated_successfully = 'Настройки канала успешно обновлены!'
     what_are_donors      = '❓<b>Что такое доноры?</b>\n\nКаналы-доноры - это такие каналы, с которых бот будет граббить информацию. Вы можете выбрать конкретные каналы, с которых бот будет граббить посты.'
+    send_channels_donors = 'Хорошо, теперь отправь мне те каналы, с которых хочешь граббить посты! Нажми на кнопку '
 
     @staticmethod
     async def render_settings(settings: dict[str]) -> str:
@@ -162,6 +163,10 @@ class ManagingChannelText:
     async def posts_created(channel: str, amount: int) -> str:
         return f'Привет!\nСгенерировал <b>{amount}</b> идей для твоего канала «{channel}»! Лови!'
     
+    @staticmethod
+    async def added_donors(channels: dict) -> str:
+        return f'Отлично! Вот выбранные каналы доноры:\n'
+     
 
 @dataclass
 class ManagingChatText:
