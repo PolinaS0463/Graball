@@ -4,6 +4,7 @@ from bot.handlers import main_router
 
 # Other imports
 import asyncio, os
+import logging, sys
 from dotenv import load_dotenv 
 
 
@@ -17,4 +18,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())

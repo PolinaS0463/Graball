@@ -1,8 +1,11 @@
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 
+from ..text.ru import BaseInfoText
+from ..utils import user_not_left
+from ..keyboards.ru import graball_channel
+from ..settings import GRABALL_CHANNEL_USERNAME, ADMIN_CHANNEL_USERNAME
 from typing import Dict, Any, Callable, Awaitable
-from ..settings import GRABALL_CHANNEL_ID
 
 
 class SubMiddleware(BaseMiddleware):
@@ -12,9 +15,7 @@ class SubMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: Dict[str, Any]) -> Any:
         
-        status = await event.bot.get_chat_member(chat_id=GRABALL_CHANNEL_ID, user_id=event.from_user.id)
-        # if status['status'] != 'left':
-        #     return await handler(event, data)
-        # else:
-        #     pass
-        return await handler(event, data)
+        if await user_not_left(GRABALL_CHANNEL_USERNAME, event, event.bot):
+            return await handler(event, data)
+        else:
+            await event.answer(text=BaseInfoText.subscribe_first, reply_markup=graball_channel)

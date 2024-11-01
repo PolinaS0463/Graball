@@ -3,13 +3,16 @@ from aiogram.filters import Command, CommandStart, CommandObject
 from aiogram.types import Message, CallbackQuery, Chat, ReactionTypeEmoji
 from aiogram.fsm.context import FSMContext
 
-
+from ..fsm import *
 from ..text.ru import *
 from ..keyboards.ru import *
+from ..language_codes import RUSSIAN, ENGLISH
 from ..utils import collect_all, send_email
-from ..fsm import *
+from ..database.languages import LanguagesDatabase
+
 
 free_router = Router()
+
 
 # Start / Старт
 # ------------------------------------------
@@ -89,21 +92,21 @@ async def cmd_contact_5(message: Message, state: FSMContext):
 @free_router.message(F.text == 'Change language')
 @free_router.message(Command('change_lang'))
 async def cmd_change_language(message: Message, bot: Bot):
-    # await bot.cop
-    pass
+    await message.answer(text=BaseInfoText.langs, reply_markup=languages, parse_mode='html')
+
+@free_router.callback_query(F.data == 'set_eng')
+async def cmd_set_english(callback: CallbackQuery):
+    await LanguagesDatabase.set_language(callback.from_user.id, ENGLISH)
+
 
 # ------------------------------------------
 
-@free_router.callback_query(F.text == 'channels')
+
+# Displaying user's channels / 
+# Показать каналы пользователя
+# ------------------------------------------
+@free_router.message(F.text == 'Каналы')
+@free_router.message(F.text == 'Channels')
 @free_router.message(Command('channels'))
 async def cmd_channels(message: Message, command: CommandObject):
-    # await message.react(reaction=[ReactionTypeEmoji(type='emoji', emoji='🔥')])
     print(command.args.split(' '))
-
-
-@free_router.callback_query(F.text == 'chats')
-@free_router.message(Command('chats'))
-async def cmd_chats(message: Message):
-    pass # TODO
-
-    # await message.react(reaction=[ReactionTypeEmoji(type='emoji', emoji='🔥')])

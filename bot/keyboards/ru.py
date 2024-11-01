@@ -8,7 +8,7 @@ from aiogram.types import KeyboardButtonRequestChat
 
 
 features = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='Новый канал / чат'), KeyboardButton(text='Каналы / чаты')], 
+    [KeyboardButton(text='Новый канал'), KeyboardButton(text='Каналы')], 
     [KeyboardButton(text='Автоматизация'), KeyboardButton(text='Режим нейросети')],
     [KeyboardButton(text='Настройки'), KeyboardButton(text='Изменить язык')],
     [KeyboardButton(text='Связаться с командой разработчиков!')]], resize_keyboard=True, one_time_keyboard=False)
@@ -37,22 +37,19 @@ channel_topics = InlineKeyboardMarkup(inline_keyboard=[
      InlineKeyboardButton(text='Физика ☣️', callback_data='topic_opt_16')],
     [InlineKeyboardButton(text='Эстетика 💎', callback_data='topic_opt_17'),
      InlineKeyboardButton(text='Учеба 🕰️', callback_data='topic_opt_18')],
+    [InlineKeyboardButton(text='Музыка 🎵', callback_data='topic_opt_19'),
+     InlineKeyboardButton(text='СМИ 🗞️', callback_data='topic_opt_20')],
+    [InlineKeyboardButton(text='Маркетинг 🚨', callback_data='topic_opt_21'),
+     InlineKeyboardButton(text='Бизнес 📌', callback_data='topic_opt_22')],
+    [InlineKeyboardButton(text='Экономика 📈', callback_data='topic_opt_23'),
+     InlineKeyboardButton(text='Крипта 🪙', callback_data='topic_opt_24')],
+    [InlineKeyboardButton(text='Мода 💅', callback_data='topic_opt_25'),
+     InlineKeyboardButton(text='Юмор 😁', callback_data='topic_opt_26')],
     [InlineKeyboardButton(text='Настроить позже >>', callback_data='cancel')],
     [InlineKeyboardButton(text='Добавить каналы-доноры самому ❓', callback_data='donors')]])
 
 contact = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Отправить', callback_data='contact_proceed')]])
-
-chat_or_channel = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='Чат', callback_data='new_chat')],
-    [InlineKeyboardButton(text='Канал', callback_data='new_channel')]
-])
-
-send_chat = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text='Отправить', request_chat=KeyboardButtonRequestChat(
-        request_id=1, chat_is_channel=True, request_title=True, request_username=True
-    ))]], 
-    resize_keyboard=True, one_time_keyboard=True)
 
 send_chats = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Отправить', request_chat=KeyboardButtonRequestChat(
@@ -61,14 +58,8 @@ send_chats = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Готово!')]], 
     resize_keyboard=True, one_time_keyboard=True)
 
-contribution = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='Python Developer', callback_data='python_developer')],
-    [InlineKeyboardButton(text='Переводчик', callback_data='translator')]
-])
-
 select_email_topic = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Проблемы с подпиской', callback_data='opt1')],
-    [InlineKeyboardButton(text='Не работает ИИ (нейросеть)', callback_data='opt2')],
     [InlineKeyboardButton(text='Проблемы с функционалом', callback_data='opt3')],
     [InlineKeyboardButton(text='Бот отвечает слишком медленно', callback_data='opt4')],
     [InlineKeyboardButton(text='Предложить новые функции', callback_data='opt5')],
@@ -76,8 +67,14 @@ select_email_topic = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Другое', callback_data='other')],
 ])
 
-not_a_bot = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='Я не бот', callback_data='not_a_bot')]
+graball_channel = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Подписаться 1️⃣', url='https://t.me/graball_bot_channel')],
+    [InlineKeyboardButton(text='Подписаться 2️⃣', url='https://t.me/graball_bot_channel')]
+])
+
+languages = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Русский', callback_data='set_ru'), 
+     InlineKeyboardButton(text='English', callback_data='set_eng')]
 ])
 
 async def add_feature(feature: str) -> InlineKeyboardMarkup:

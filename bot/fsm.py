@@ -9,16 +9,9 @@ class SendEmailSteps(StatesGroup):
 class NewTopic(StatesGroup):
     topic = State()
 
-class NewChat(StatesGroup):
-    chat = State()
-
 class NewChannel(StatesGroup):
     features = State()
     topics   = State()
-
-class NewChatMember(StatesGroup):
-    uid    = State()
-    commit = State()
 
 class Donors(StatesGroup):
     channels = State()

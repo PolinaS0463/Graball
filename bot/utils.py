@@ -1,5 +1,5 @@
 from aiogram import Bot
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 from aiogram.enums.chat_member_status import ChatMemberStatus
 
 import os
@@ -11,14 +11,14 @@ from dotenv import load_dotenv
 
 async def collect_all(message: Message):
     return {
-        'username' : message.from_user.id,
+        'username' : message.from_user.username,
         'full_name' : message.from_user.full_name,
         'user_telegram_id' : message.from_user.id,
-        'channels_amount' : None, # TODO
-        'chats_amount' : None, # TODO
+        'channels' : '/channels', # TODO
+        'chats' : '/chats', # TODO
         'subscription' : None, # TODO
         'free_hours_left' : None,
-        'password' : None, # TODO
+        'password' : '/personal_data', # TODO
         'active_sessions' : '/sessions'
         }
 
@@ -42,9 +42,15 @@ async def send_email(topic: str, content: str, email: str):
     con.quit()
 
 
-async def is_admin(message: Message, bot: Bot) -> bool:
-    member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+async def is_admin(event: Message, bot: Bot) -> bool:
+    member = await bot.get_chat_member(event.chat.id, event.from_user.id)
     if member.status in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.CREATOR]:
+        return True
+    return False
+
+async def user_not_left(target_channel_username: int, event: Message, bot: Bot) -> bool:
+    member = await bot.get_chat_member(target_channel_username, event.from_user.id)
+    if member.status != ChatMemberStatus.LEFT:
         return True
     return False
 

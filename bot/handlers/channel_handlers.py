@@ -1,7 +1,7 @@
 from aiogram import Bot, Router, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, LinkPreviewOptions
 
 from ..keyboards.ru import *
 from ..fsm import NewChannel, Donors
@@ -23,8 +23,24 @@ async def statistics(callback: CallbackQuery):
     await callback.message.answer(text=FunctionsText.stat, reply_markup=await add_feature('statistics'), parse_mode='html')
 
 @channel_router.callback_query(F.data == 'add_manage_channel')
-async def add_manage_channel(callback: CallbackQuery):
+async def add_manage_channel_1(callback: CallbackQuery):
     await callback.message.edit_text(text=ManagingChannelText.topics, reply_markup=channel_topics)
+
+
+@channel_router.callback_query(F.data.regexp(r'topic_opt_[\d]+', mode='fullmatch'))
+async def add_topics_1(callback: CallbackQuery):
+    topic = None
+    markup = callback.message.reply_markup.inline_keyboard
+    for button in markup:
+        if button[0].callback_data == callback.data:
+            topic = button[0].text
+    await callback.message.answer(text=await ManagingChannelText.new_topic_added(topic))
+
+
+@channel_router.callback_query(F.data == 'add_statistics')
+async def add_manage_channel_2(callback: CallbackQuery):
+    await callback.answer()
+
 
 @channel_router.callback_query(F.data == 'donors')
 async def donors(callback: CallbackQuery):
@@ -38,15 +54,14 @@ async def add_donors(callback: CallbackQuery, state: FSMContext):
 @channel_router.message(Donors.channels)
 async def add_donors_2(message: Message, state: FSMContext):
     data = await state.get_data()
-    new_channel = message.chat_shared
-    if data:
-        data['channels'].append(new_channel)
-        await state.update_data(channels=data['channels'])
-    else: 
-        await state.update_data(channels=[new_channel])
-    print(await state.get_data())
+    if message.text == 'Готово!':
+        await message.answer(text=await ManagingChannelText.added_donors(data), parse_mode='html', 
+                             link_preview_options=LinkPreviewOptions(is_disabled=True), reply_markup=features)
+        await state.clear()
+    else:
+        if data:
+            data['channels'].append(message.chat_shared)
+            await state.update_data(channels=data['channels'])
+        else: 
+            await state.update_data(channels=[message.chat_shared])
     
-@channel_router.message(F.text == 'Готово!')
-async def add_donors_3(message: Message, state: FSMContext):
-    data = await state.get_data()
-    print(data)
